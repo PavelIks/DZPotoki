@@ -1,5 +1,6 @@
 package com.company;
 
+import java.util.Arrays;
 import java.util.OptionalDouble;
 import java.util.stream.IntStream;
 import java.util.Random;
@@ -33,8 +34,8 @@ public class Main
         {
             try
             {
-                OptionalDouble count = IntStream.of(My_Array).average();
-                System.out.println(count);
+                double avg = Arrays.stream(My_Array).average().orElse(Double.NaN);
+                System.out.println(avg);
 
                 Thread.sleep(500);
             }
