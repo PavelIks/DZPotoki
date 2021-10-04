@@ -2,7 +2,7 @@ package com.company;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;
-import java.util.Random;
+/*import java.util.Random;*/
 
 public class Main
 {
@@ -13,10 +13,10 @@ public class Main
         {
             try
             {
-                Random random = new Random();
+                /*Random random = new Random();*/
                 My_Array = new int[20];
-                for (int i = 0; i < My_Array.length; i++) { /*My_Array[i] = random.nextInt();*/ My_Array[i] = (int)(Math.random()*10); }
-                for (int i = 0; i < My_Array.length; i++) { System.out.print(My_Array[i] + " "); } System.out.print("- массив" + "\n");
+                for (int i = 0; i < My_Array.length; i++) { /*My_Array[i] = random.nextInt();*/ My_Array[i] = (int)(Math.random()*11); }
+                for (int i = 0; i < My_Array.length; i++) { System.out.print(My_Array[i] + " "); } System.out.print("- массив (диапазон -- 0-10)" + "\n");
 
                 Thread.sleep(500);
             }
