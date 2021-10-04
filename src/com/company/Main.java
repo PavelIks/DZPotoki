@@ -9,10 +9,6 @@ public class Main
     static int My_Array[];
     static class My_Array_Thread extends Thread
     {
-        My_Array_Thread(String name)
-        {
-            super(name);
-        }
         public void run()
         {
             try
@@ -33,10 +29,6 @@ public class Main
 
     static class My_Average_Thread extends Thread
     {
-        My_Average_Thread(String name)
-        {
-            super(name);
-        }
         public void run()
         {
             try
@@ -55,10 +47,6 @@ public class Main
 
     static class My_Average_Sum extends Thread
     {
-        My_Average_Sum(String name)
-        {
-            super(name);
-        }
         public void run()
         {
             try
@@ -77,9 +65,9 @@ public class Main
 
     public static void main(String[] args) throws InterruptedException
     {
-        new My_Array_Thread("My_Array_Thread").start();
+        new My_Array_Thread().start();
         Thread.sleep(1000);
-        new My_Average_Thread("My_Average_Thread").start();
-        new My_Average_Sum("My_Average_Sum").start();
+        new My_Average_Thread().start();
+        new My_Average_Sum().start();
     }
 }
