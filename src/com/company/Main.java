@@ -1,7 +1,6 @@
 package com.company;
 
 import java.util.Arrays;
-import java.util.OptionalDouble;
 import java.util.stream.IntStream;
 import java.util.Random;
 
@@ -15,9 +14,9 @@ public class Main
             try
             {
                 Random random = new Random();
-                My_Array = new int[10];
-                for (int i = 0; i < My_Array.length; i++) { My_Array[i] = random.nextInt(); }
-                for (int i = 0; i < My_Array.length; i++) { System.out.print(My_Array[i] + " "); } System.out.print("\n");
+                My_Array = new int[20];
+                for (int i = 0; i < My_Array.length; i++) { /*My_Array[i] = random.nextInt();*/ My_Array[i] = (int)(Math.random()*10); }
+                for (int i = 0; i < My_Array.length; i++) { System.out.print(My_Array[i] + " "); } System.out.print("- массив" + "\n");
 
                 Thread.sleep(500);
             }
@@ -35,7 +34,7 @@ public class Main
             try
             {
                 double avg = Arrays.stream(My_Array).average().orElse(Double.NaN);
-                System.out.println(avg);
+                System.out.println(avg + " - среднее арифметическое массива");
 
                 Thread.sleep(500);
             }
@@ -46,14 +45,14 @@ public class Main
         }
     }
 
-    static class My_Average_Sum extends Thread
+    static class My_Sum_Thread extends Thread
     {
         public void run()
         {
             try
             {
                 int count = IntStream.of(My_Array).sum();
-                System.out.println(count);
+                System.out.println(count + " - сумма массива");
 
                 Thread.sleep(500);
             }
@@ -69,6 +68,6 @@ public class Main
         new My_Array_Thread().start();
         Thread.sleep(1000);
         new My_Average_Thread().start();
-        new My_Average_Sum().start();
+        new My_Sum_Thread().start();
     }
 }
