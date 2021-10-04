@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.Random;
+
 public class Main
 {
     static class My_Thread extends Thread
@@ -14,8 +16,17 @@ public class Main
             System.out.printf(Thread.currentThread().getName() + " started!\n");
             try
             {
-                double a = Math.random();
-                System.out.println (a);
+                Random random = new Random();
+                int Array[] = new int[10];
+                for (int i = 0; i < Array.length; i++)
+                {
+                    Array[i] = random.nextInt();
+                }
+                for (int i = 0; i < Array.length; i++)
+                {
+                    System.out.print(Array[i] + " ");
+                }
+                System.out.print("\n");
 
                 Thread.sleep(500);
             }
