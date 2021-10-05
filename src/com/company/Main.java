@@ -81,27 +81,42 @@ import java.util.Scanner;
 
 public class Main
 {
-    public static void main(String[] args)
+    static int My_Array[];
+
+    public static void main(String[] args) throws IOException
     {
-        Scanner in = new Scanner(System.in);
+        Scanner scanner1 = new Scanner(System.in);
         System.out.print("Введи путь: "); /*C:/Users/User_PavelIks/IdeaProjects/console1/text.txt*/
-        String path1 = in.nextLine();
-        String fileName = path1;
-        File file = new File(fileName);
-        if(file.exists()) { System.out.println("Файл есть!"); }
-        else { System.out.println("Файла нет!"); }
-        try(FileInputStream fo = new FileInputStream(fileName))
+        String path1 = scanner1.nextLine();
+        String file_name1 = path1;
+        File file1 = new File(file_name1); if (file1.exists()) { System.out.println("Файл есть!"); } else { System.out.println("Файла нет!"); }
+
+        // Перезаписать данные из файла
+        My_Array = new int[20];
+        for (int i = 0; i < My_Array.length; i++)
+        { My_Array[i] = (int)(Math.random()*11); }
+
+        // Записать в файл рандомные числа
+        int new_data[] = My_Array;
+        BufferedWriter outputWriter = null;
+        outputWriter = new BufferedWriter(new FileWriter(file_name1));
+        for (int i = 0; i < new_data.length; i++)
+        { outputWriter.write(new_data[i] + " "); }
+        outputWriter.flush(); outputWriter.close();
+
+        // Прочитать данные из файла
+        try(FileInputStream fis1 = new FileInputStream(file_name1))
         {
-            byte[] buffer = new byte[fo.available()];
-            fo.read(buffer);
-            String data = new String(buffer);
-            System.out.println("Содержимое файла: " + data);
+            byte[] buffer = new byte[fis1.available()];
+            fis1.read(buffer);
+            String file_data1 = new String(buffer);
+            System.out.println("Содержимое файла: " + file_data1);
             int i = -1;
-            while ((i=fo.read()) != -1)
-            { System.out.print((char)i); }
+            while ((i=fis1.read()) != -1) { System.out.print((char)i); }
         }
         catch (IOException ex)
         { System.out.println(ex.getMessage()); }
-        System.out.println("Файл прочитан!");
+
+        System.out.println("Файл перезаписан и прочитан!");
     }
 }
