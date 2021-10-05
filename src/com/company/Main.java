@@ -101,6 +101,15 @@ public class Main
         outputWriter = new BufferedWriter(new FileWriter(file_name1));
         for (int i = 0; i < new_data.length; i++) { outputWriter.write(new_data[i] + " "); } outputWriter.flush(); outputWriter.close();
 
+        // Поиск чётных чисел
+        int count = 0;
+        try (Scanner sc = new Scanner(new File("C:/Users/User_PavelIks/IdeaProjects/console1/text.txt")))
+        { while (sc.hasNextInt()) { if (sc.nextInt() % 2 == 0) { count++; } } }
+        catch (IOException ex) { ex.printStackTrace(); }
+        System.out.println(count);
+        File file = new File("C:/Users/User_PavelIks/IdeaProjects/console1/text.txt");
+        printResult(file);
+
         // Прочитать и вывести данные из файла
         try(FileInputStream fis1 = new FileInputStream(file_name1))
         {
@@ -114,5 +123,13 @@ public class Main
         catch (IOException ex) { System.out.println(ex.getMessage()); }
 
         System.out.println("Файл перезаписан и прочитан!");
+    }
+
+    public static void printResult(File file) throws FileNotFoundException
+    {
+        Scanner scanner = new Scanner(file);
+        String line = scanner.nextLine();
+        String[] numbers = line.split(" ");
+        for (String number : numbers) { if (Integer.parseInt(number) != 0 && Integer.parseInt(number) % 2 == 0) { System.out.print(number + " "); } }
     }
 }
