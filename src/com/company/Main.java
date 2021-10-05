@@ -1,4 +1,5 @@
-package com.company;
+// Задание: При старте приложения запускаются три потока. Первый поток заполняет массив случайными числами. Два других потока ожидают заполнения. Когда массив заполнен оба потока запускаются. Первый поток находит сумму элементов массива, второй поток среднеарифметическое значение в массиве. Полученный массив, сумма и среднеарифметическое возвращаются в метод main, где должны быть отображены.
+/*package com.company;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;
@@ -68,5 +69,39 @@ public class Main
         Thread.sleep(1000);
         new My_Average_Thread().start();
         new My_Sum_Thread().start();
+    }
+}*/
+
+// Задание 2:
+
+package com.company;
+
+import java.io.*;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        Scanner in = new Scanner(System.in);
+        System.out.print("Введи путь: "); /*C:/Users/User_PavelIks/IdeaProjects/console1/text.txt*/
+        String path1 = in.nextLine();
+        String fileName = path1;
+        File file = new File(fileName);
+        if(file.exists()) { System.out.println("Файл есть!"); }
+        else { System.out.println("Файла нет!"); }
+        try(FileInputStream fo = new FileInputStream(fileName))
+        {
+            byte[] buffer = new byte[fo.available()];
+            fo.read(buffer);
+            String data = new String(buffer);
+            System.out.println("Содержимое файла: " + data);
+            int i = -1;
+            while ((i=fo.read()) != -1)
+            { System.out.print((char)i); }
+        }
+        catch (IOException ex)
+        { System.out.println(ex.getMessage()); }
+        System.out.println("Файл прочитан!");
     }
 }
