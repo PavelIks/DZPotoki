@@ -85,18 +85,19 @@ public class Main
 
     public static void main(String[] args) throws IOException
     {
+        // Указать путь+файл и проверить наличие файла
         Scanner scanner1 = new Scanner(System.in);
         System.out.print("Введи путь: "); /*C:/Users/User_PavelIks/IdeaProjects/console1/text.txt*/
         String path1 = scanner1.nextLine();
         String file_name1 = path1;
         File file1 = new File(file_name1); if (file1.exists()) { System.out.println("Файл есть!"); } else { System.out.println("Файла нет!"); }
 
-        // Перезаписать данные из файла
+        // Массив из 20и рандомных чисел с диапазоном 0-10
         My_Array = new int[20];
         for (int i = 0; i < My_Array.length; i++)
         { My_Array[i] = (int)(Math.random()*11); }
 
-        // Записать в файл рандомные числа
+        // Перезаписать данные файла и записать в файл массив рандомных чисел
         int new_data[] = My_Array;
         BufferedWriter outputWriter = null;
         outputWriter = new BufferedWriter(new FileWriter(file_name1));
