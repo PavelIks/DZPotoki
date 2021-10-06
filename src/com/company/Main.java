@@ -95,10 +95,9 @@ public class Main
 
     public static void main(String[] args) throws IOException
     {
-        /*C:/Users/User_PavelIks/IdeaProjects/console1/text.txt*/
-        // Указать путь+файл и проверить на предмет наличия файла
+        // Указать путь+файл(-.txt) и проверить на предмет наличия файла
         Scanner scanner1 = new Scanner(System.in);
-        System.out.print("Введи путь: ");
+        System.out.print("Введи путь: "); /*C:/Users/User_PavelIks/IdeaProjects/console1/text.txt*/
         path1 = scanner1.nextLine();
         String file_name1 = path1;
         File file1 = new File(file_name1); if (file1.exists()) { System.out.println("Файл есть!"); } else { System.out.println("Файла нет!"); }
@@ -128,16 +127,7 @@ public class Main
         // Поиск чётных чисел
         int count = 0;
         try (Scanner sc = new Scanner(new File(path1)))
-        {
-            while (sc.hasNextInt())
-            {
-                int i = sc.nextInt();
-                if (i % 2 == 0 && i != 0)
-                {
-                    count++;
-                }
-            }
-        }
+        { while (sc.hasNextInt()) { int i = sc.nextInt();if (i % 2 == 0 && i != 0) { count++; } } }
         catch (IOException ex) { ex.printStackTrace(); }
         System.out.println("Количество чётных чисел: " + count);
         File file = new File(path1);
