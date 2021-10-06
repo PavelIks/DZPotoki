@@ -82,13 +82,24 @@ import java.util.Scanner;
 public class Main
 {
     static int My_Array[];
+    static String path1;
+
+    public static void printResult(File file) throws FileNotFoundException
+    {
+        Scanner scanner = new Scanner(file);
+        String line = scanner.nextLine();
+        String[] numbers = line.split(" ");
+        System.out.print("Чётные числа: ");
+        for (String number : numbers) { if (Integer.parseInt(number) != 0 && Integer.parseInt(number) % 2 == 0) { System.out.print(number + " "); } }
+    }
 
     public static void main(String[] args) throws IOException
     {
+        /*C:/Users/User_PavelIks/IdeaProjects/console1/text.txt*/
         // Указать путь+файл и проверить на предмет наличия файла
         Scanner scanner1 = new Scanner(System.in);
-        System.out.print("Введи путь: "); /*C:/Users/User_PavelIks/IdeaProjects/console1/text.txt*/
-        String path1 = scanner1.nextLine();
+        System.out.print("Введи путь: ");
+        path1 = scanner1.nextLine();
         String file_name1 = path1;
         File file1 = new File(file_name1); if (file1.exists()) { System.out.println("Файл есть!"); } else { System.out.println("Файла нет!"); }
 
@@ -101,14 +112,6 @@ public class Main
         outputWriter = new BufferedWriter(new FileWriter(file_name1));
         for (int i = 0; i < new_data.length; i++) { outputWriter.write(new_data[i] + " "); } outputWriter.flush(); outputWriter.close();
 
-        // Поиск чётных чисел
-        int count = 0;
-        try (Scanner sc = new Scanner(new File("C:/Users/User_PavelIks/IdeaProjects/console1/text.txt")))
-        { while (sc.hasNextInt()) { if (sc.nextInt() % 2 == 0) { count++; } } }
-        catch (IOException ex) { ex.printStackTrace(); }
-        System.out.println(count);
-        File file = new File("C:/Users/User_PavelIks/IdeaProjects/console1/text.txt");
-        printResult(file);
 
         // Прочитать и вывести данные из файла
         try(FileInputStream fis1 = new FileInputStream(file_name1))
@@ -116,20 +119,30 @@ public class Main
             byte[] buffer = new byte[fis1.available()];
             fis1.read(buffer);
             String file_data1 = new String(buffer);
-            System.out.println("Содержимое файла: " + file_data1);
+            System.out.println("\nСодержимое файла: " + file_data1);
             int i = -1;
             while ((i=fis1.read()) != -1) { System.out.print((char)i); }
         }
         catch (IOException ex) { System.out.println(ex.getMessage()); }
 
-        System.out.println("Файл перезаписан и прочитан!");
-    }
+        // Поиск чётных чисел
+        int count = 0;
+        try (Scanner sc = new Scanner(new File(path1)))
+        {
+            while (sc.hasNextInt())
+            {
+                int i = sc.nextInt();
+                if (i % 2 == 0 && i != 0)
+                {
+                    count++;
+                }
+            }
+        }
+        catch (IOException ex) { ex.printStackTrace(); }
+        System.out.println("Количество чётных чисел: " + count);
+        File file = new File(path1);
+        printResult(file);
 
-    public static void printResult(File file) throws FileNotFoundException
-    {
-        Scanner scanner = new Scanner(file);
-        String line = scanner.nextLine();
-        String[] numbers = line.split(" ");
-        for (String number : numbers) { if (Integer.parseInt(number) != 0 && Integer.parseInt(number) % 2 == 0) { System.out.print(number + " "); } }
+        System.out.println("\n\nФайл перезаписан и прочитан!");
     }
 }
