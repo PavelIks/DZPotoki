@@ -82,6 +82,55 @@ import java.util.Scanner;
 public class Main
 {
     static int My_Array[]; static String path1; static String file_name1;
+    static class CommonResource { int x1 = 0; int x2 = 0;}
+
+    static class CountThread implements Runnable
+    {
+        CommonResource res;
+        CountThread(CommonResource com) { res = com; }
+
+        // Синхронизация потоков
+        @Override
+        public void run()
+        {
+            synchronized (res)
+            {
+                // Количество чётных чисел
+                res.x1 = 0;
+                try (Scanner sc = new Scanner(new File(path1)))
+                {
+                    while (sc.hasNextInt())
+                    {
+                        int i1 = sc.nextInt();
+                        if (i1 % 2 == 0 && i1 != 0) { res.x1++; }
+                    }
+                }
+                catch (IOException ex) { ex.printStackTrace(); }
+                System.out.println("Количество чётных чисел:\t" + res.x1);
+                File file = new File(path1);
+                try { printResult1(file); System.out.println(); }
+                catch (FileNotFoundException e) { e.printStackTrace(); }
+                try { Thread.sleep(100); }
+                catch (InterruptedException e) { e.printStackTrace(); }
+
+                // Поиск нечётных чисел
+                res.x2 = 0;
+                try (Scanner sc = new Scanner(new File(path1)))
+                {
+                    while (sc.hasNextInt()) { int i1 = sc.nextInt();
+                    if (i1 % 2 != 0 && i1 != 0) { res.x2++; } }
+                }
+                catch (IOException ex)
+                { ex.printStackTrace(); }
+                System.out.println("Количество нечётных чисел:\t" + res.x2);
+                try { printResult2(file); System.out.println(); }
+                catch (FileNotFoundException e) { e.printStackTrace(); }
+                try { Thread.sleep(100); }
+                catch (InterruptedException e) { e.printStackTrace(); }
+            }
+        }
+    }
+
     static void printResult1(File file) throws FileNotFoundException
     {
         Scanner scanner = new Scanner(file);
@@ -124,37 +173,6 @@ public class Main
         }
     }
 
-    static class My_search_for_even_numbers_Thread extends Thread
-    {
-        public void run()
-        {
-            // Поиск чётных чисел
-            int count1 = 0;
-            try (Scanner sc = new Scanner(new File(path1)))
-            { while (sc.hasNextInt()) { int i = sc.nextInt(); if (i % 2 == 0 && i != 0) { count1++; } } }
-            catch (IOException ex) { ex.printStackTrace(); }
-            System.out.println("Количество чётных чисел:\t" + count1);
-            File file = new File(path1);
-            try { printResult1(file);System.out.println(); }
-            catch (FileNotFoundException e) { e.printStackTrace(); }}
-    }
-
-    static class My_search_for_odd_numbers_Thread extends Thread
-    {
-        public void run()
-        {
-            // Поиск нечётных чисел
-            int count2 = 0;
-            try (Scanner sc = new Scanner(new File(path1)))
-            { while (sc.hasNextInt()) { int i = sc.nextInt(); if (i % 2 != 0 && i != 0) { count2++; } } }
-            catch (IOException ex) { ex.printStackTrace(); }
-            System.out.println("Количество нечётных чисел:\t" + count2);
-            File file = new File(path1);
-            try { printResult2(file);System.out.println(); }
-            catch (FileNotFoundException e) { e.printStackTrace(); }
-        }
-    }
-
     public static void main(String[] args) throws InterruptedException
     {
         // Указать путь+файл(-.txt) и проверить на предмет наличия файла
@@ -179,12 +197,10 @@ public class Main
             while ((i=fis1.read()) != -1) { System.out.print((char)i); }
         }
         catch (IOException ex) { System.out.println(ex.getMessage()); }
-        Thread.sleep(500);
+        Thread.sleep(150);
 
-        // Thread: Чётные числа
-        new My_search_for_even_numbers_Thread().start();
-        // Thread: Нечётные числа
-        new My_search_for_odd_numbers_Thread().start();
-        Thread.sleep(500);
+        CommonResource resource1 = new CommonResource();
+        Thread t1 = new Thread(new CountThread(resource1));
+        t1.start();
     }
 }
