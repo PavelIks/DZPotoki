@@ -135,7 +135,7 @@ public class Main
         Scanner scanner = new Scanner(file);
         String line = scanner.nextLine();
         String[] numbers = line.split(" ");
-        System.out.print("Чётные числа:\t");
+        System.out.print("Чётные числа:\t\t\t\t");
         for (String number : numbers) { if (Integer.parseInt(number) != 0 && Integer.parseInt(number) % 2 == 0) { System.out.print(number + " "); } }
     }
     // Поиск нечётных чисел
@@ -144,7 +144,7 @@ public class Main
         Scanner scanner = new Scanner(file);
         String line = scanner.nextLine();
         String[] numbers = line.split(" ");
-        System.out.print("Нечётные числа:\t");
+        System.out.print("Нечётные числа:\t\t\t\t");
         for (String number : numbers) { if (Integer.parseInt(number) != 0 && Integer.parseInt(number) % 2 != 0) { System.out.print(number + " "); } }
     }
     // Генерация массива из 20и случайных чисел диапазоном 0-10
@@ -192,7 +192,7 @@ public class Main
             byte[] buffer = new byte[fis1.available()];
             fis1.read(buffer);
             String file_data1 = new String(buffer);
-            System.out.println("\nСодержимое файла: " + file_data1);
+            System.out.println("\nСодержимое файла:\t\t\t" + file_data1);
             int i = -1;
             while ((i=fis1.read()) != -1) { System.out.print((char)i); }
         }
