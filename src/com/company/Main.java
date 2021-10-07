@@ -101,8 +101,7 @@ public class Main
                 {
                     while (sc.hasNextInt())
                     {
-                        int i1 = sc.nextInt();
-                        if (i1 % 2 == 0 && i1 != 0) { res.x1++; }
+                        int i1 = sc.nextInt(); if (i1 % 2 == 0 && i1 != 0) { res.x1++; }
                     }
                 }
                 catch (IOException ex) { ex.printStackTrace(); }
@@ -113,12 +112,11 @@ public class Main
                 try { Thread.sleep(100); }
                 catch (InterruptedException e) { e.printStackTrace(); }
 
-                // Поиск нечётных чисел
+                // Количество нечётных чисел
                 res.x2 = 0;
                 try (Scanner sc = new Scanner(new File(path1)))
                 {
-                    while (sc.hasNextInt()) { int i1 = sc.nextInt();
-                    if (i1 % 2 != 0 && i1 != 0) { res.x2++; } }
+                    while (sc.hasNextInt()) { int i1 = sc.nextInt(); if (i1 % 2 != 0 && i1 != 0) { res.x2++; } }
                 }
                 catch (IOException ex)
                 { ex.printStackTrace(); }
@@ -131,6 +129,7 @@ public class Main
         }
     }
 
+    // Поиск чётных чисел
     static void printResult1(File file) throws FileNotFoundException
     {
         Scanner scanner = new Scanner(file);
@@ -139,6 +138,7 @@ public class Main
         System.out.print("Чётные числа:\t");
         for (String number : numbers) { if (Integer.parseInt(number) != 0 && Integer.parseInt(number) % 2 == 0) { System.out.print(number + " "); } }
     }
+    // Поиск нечётных чисел
     static void printResult2(File file) throws FileNotFoundException
     {
         Scanner scanner = new Scanner(file);
@@ -147,7 +147,7 @@ public class Main
         System.out.print("Нечётные числа:\t");
         for (String number : numbers) { if (Integer.parseInt(number) != 0 && Integer.parseInt(number) % 2 != 0) { System.out.print(number + " "); } }
     }
-
+    // Генерация массива из 20и случайных чисел диапазоном 0-10
     static class My_random_numbers_Thread extends Thread
     {
         public void run()
@@ -186,7 +186,7 @@ public class Main
         new My_random_numbers_Thread().start();
         Thread.sleep(500);
 
-        // Прочитать и вывести данные из файла
+        // Прочитать и показать данные из файла в консоле
         try(FileInputStream fis1 = new FileInputStream(file_name1))
         {
             byte[] buffer = new byte[fis1.available()];
@@ -199,6 +199,7 @@ public class Main
         catch (IOException ex) { System.out.println(ex.getMessage()); }
         Thread.sleep(150);
 
+        // Thread: Старт синхронных потоков
         CommonResource resource1 = new CommonResource();
         Thread t1 = new Thread(new CountThread(resource1));
         t1.start();
