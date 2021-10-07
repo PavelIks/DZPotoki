@@ -81,36 +81,92 @@ import java.util.Scanner;
 
 public class Main
 {
-    static int My_Array[];
-    static String path1;
-
-    public static void printResult(File file) throws FileNotFoundException
+    static int My_Array[]; static String path1; static String file_name1;
+    static void printResult1(File file) throws FileNotFoundException
     {
         Scanner scanner = new Scanner(file);
         String line = scanner.nextLine();
         String[] numbers = line.split(" ");
-        System.out.print("Чётные числа: ");
+        System.out.print("Чётные числа:\t");
         for (String number : numbers) { if (Integer.parseInt(number) != 0 && Integer.parseInt(number) % 2 == 0) { System.out.print(number + " "); } }
     }
+    static void printResult2(File file) throws FileNotFoundException
+    {
+        Scanner scanner = new Scanner(file);
+        String line = scanner.nextLine();
+        String[] numbers = line.split(" ");
+        System.out.print("Нечётные числа:\t");
+        for (String number : numbers) { if (Integer.parseInt(number) != 0 && Integer.parseInt(number) % 2 != 0) { System.out.print(number + " "); } }
+    }
 
-    public static void main(String[] args) throws IOException
+    static class My_random_numbers_Thread extends Thread
+    {
+        public void run()
+        {
+            // Сгенерировать массив из 20и рандомных чисел диапазоном 0-10
+            My_Array = new int[20]; for (int i = 0; i < My_Array.length; i++) { My_Array[i] = (int)(Math.random()*11); }
+
+            // Перезаписать данные файла и записать в файл массив рандомных чисел
+            int new_data[] = My_Array;
+            BufferedWriter outputWriter = null;
+            try { outputWriter = new BufferedWriter(new FileWriter(file_name1)); }
+            catch (IOException e) { e.printStackTrace(); }
+            for (int i = 0; i < new_data.length; i++)
+            {
+                try { outputWriter.write(new_data[i] + " "); }
+                catch (IOException e) { e.printStackTrace(); }
+            }
+            try { outputWriter.flush(); }
+            catch (IOException e) { e.printStackTrace(); }
+            try { outputWriter.close(); }
+            catch (IOException e) { e.printStackTrace(); }
+            System.out.println("Файл перезаписан и прочитан!");
+        }
+    }
+
+    static class My_search_for_even_numbers_Thread extends Thread
+    {
+        public void run()
+        {
+            // Поиск чётных чисел
+            int count1 = 0;
+            try (Scanner sc = new Scanner(new File(path1)))
+            { while (sc.hasNextInt()) { int i = sc.nextInt(); if (i % 2 == 0 && i != 0) { count1++; } } }
+            catch (IOException ex) { ex.printStackTrace(); }
+            System.out.println("Количество чётных чисел:\t" + count1);
+            File file = new File(path1);
+            try { printResult1(file);System.out.println(); }
+            catch (FileNotFoundException e) { e.printStackTrace(); }}
+    }
+
+    static class My_search_for_odd_numbers_Thread extends Thread
+    {
+        public void run()
+        {
+            // Поиск нечётных чисел
+            int count2 = 0;
+            try (Scanner sc = new Scanner(new File(path1)))
+            { while (sc.hasNextInt()) { int i = sc.nextInt(); if (i % 2 != 0 && i != 0) { count2++; } } }
+            catch (IOException ex) { ex.printStackTrace(); }
+            System.out.println("Количество нечётных чисел:\t" + count2);
+            File file = new File(path1);
+            try { printResult2(file);System.out.println(); }
+            catch (FileNotFoundException e) { e.printStackTrace(); }
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException
     {
         // Указать путь+файл(-.txt) и проверить на предмет наличия файла
         Scanner scanner1 = new Scanner(System.in);
         System.out.print("Введи путь: "); /*C:/Users/User_PavelIks/IdeaProjects/console1/text.txt*/
         path1 = scanner1.nextLine();
-        String file_name1 = path1;
+        file_name1 = path1;
         File file1 = new File(file_name1); if (file1.exists()) { System.out.println("Файл есть!"); } else { System.out.println("Файла нет!"); }
 
-        // Сгенерировать массив из 20и рандомных чисел диапазоном 0-10
-        My_Array = new int[20]; for (int i = 0; i < My_Array.length; i++) { My_Array[i] = (int)(Math.random()*11); }
-
-        // Перезаписать данные файла и записать в файл массив рандомных чисел
-        int new_data[] = My_Array;
-        BufferedWriter outputWriter = null;
-        outputWriter = new BufferedWriter(new FileWriter(file_name1));
-        for (int i = 0; i < new_data.length; i++) { outputWriter.write(new_data[i] + " "); } outputWriter.flush(); outputWriter.close();
-
+        // Thread: Сгенерировать рандомные числа
+        new My_random_numbers_Thread().start();
+        Thread.sleep(500);
 
         // Прочитать и вывести данные из файла
         try(FileInputStream fis1 = new FileInputStream(file_name1))
@@ -123,16 +179,12 @@ public class Main
             while ((i=fis1.read()) != -1) { System.out.print((char)i); }
         }
         catch (IOException ex) { System.out.println(ex.getMessage()); }
+        Thread.sleep(500);
 
-        // Поиск чётных чисел
-        int count = 0;
-        try (Scanner sc = new Scanner(new File(path1)))
-        { while (sc.hasNextInt()) { int i = sc.nextInt();if (i % 2 == 0 && i != 0) { count++; } } }
-        catch (IOException ex) { ex.printStackTrace(); }
-        System.out.println("Количество чётных чисел: " + count);
-        File file = new File(path1);
-        printResult(file);
-
-        System.out.println("\n\nФайл перезаписан и прочитан!");
+        // Thread: Чётные числа
+        new My_search_for_even_numbers_Thread().start();
+        // Thread: Нечётные числа
+        new My_search_for_odd_numbers_Thread().start();
+        Thread.sleep(500);
     }
 }
