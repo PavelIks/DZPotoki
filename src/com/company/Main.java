@@ -54,7 +54,7 @@ public class Main
     }
 }*/
 
-// Задание 2: ...
+// Задание 2: Пользователь с клавиатуры вводит путь к файлу. После чего запускаются три потока. Первый поток заполняет файл случайными числами. Два других потока ожидают заполнения. Когда файл заполнен оба потока стартуют. Первый поток находит все простые числа, второй поток факториал каждого числа в файле. Результаты поиска каждый поток должен записать в новый файл. В методе main необходимо отобразить статистику выполненных операций.
 /*package com.company;
 import java.io.*;
 import java.util.Scanner;
@@ -182,8 +182,8 @@ public class Main
     }
 }*/
 
-// Задание 3: ...
-package com.company;
+// Задание 3: Пользователь с клавиатуры вводит путь к существующей директории и к новой директории. После чего запускается поток, который должен скопировать содержимое директории в новое место. Необходимо сохранить структуру директории. В методе main необходимо отобразить статистику выполненных операций.
+/*package com.company;
 import java.io.*;
 import java.nio.file.*;
 import java.util.Scanner;
@@ -232,12 +232,12 @@ public class Main
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Path.of(list)))
         {
             System.out.print("Перечень файлов:\n");
-            int a1 = 0;
-            for (Path files: stream) { a1++; System.out.println(a1 + ". " + files.getFileName()); }
+            int number = 0;
+            for (Path files: stream) { System.out.println(number++ + ". " + files.getFileName()); }
         }
         catch (IOException | DirectoryIteratorException x) { System.err.println(x); }
 
         // Thread: Начать копирование и вставку
         new My_Thread().start();
     }
-}
+}*/
