@@ -1,4 +1,4 @@
-// Задание: При старте приложения запускаются три потока. Первый поток заполняет массив случайными числами. Два других потока ожидают заполнения. Когда массив заполнен оба потока запускаются. Первый поток находит сумму элементов массива, второй поток среднеарифметическое значение в массиве. Полученный массив, сумма и среднеарифметическое возвращаются в метод main, где должны быть отображены.
+// Задание 1: При старте приложения запускаются три потока. Первый поток заполняет массив случайными числами. Два других потока ожидают заполнения. Когда массив заполнен оба потока запускаются. Первый поток находит сумму элементов массива, второй поток среднеарифметическое значение в массиве. Полученный массив, сумма и среднеарифметическое возвращаются в метод main, где должны быть отображены.
 /*package com.company;
 import java.util.Arrays;
 import java.util.stream.IntStream;
@@ -55,30 +55,35 @@ public class Main
 }*/
 
 // Задание 2: Пользователь с клавиатуры вводит путь к файлу. После чего запускаются три потока. Первый поток заполняет файл случайными числами. Два других потока ожидают заполнения. Когда файл заполнен оба потока стартуют. Первый поток находит все простые числа, второй поток факториал каждого числа в файле. Результаты поиска каждый поток должен записать в новый файл. В методе main необходимо отобразить статистику выполненных операций.
-/*package com.company;
+package com.company;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Scanner;
 
 public class Main
 {
-    static int My_Array[]; static String path1; static String file_name1;
+    static int My_Array[];
+    static String file_with_numbers_path;
+    static String file_with_numbers_name;
+    static File file_with_results;
     static class CommonResource { int x1 = 0; int x2 = 0; }
 
     static class CountThread implements Runnable
     {
         CommonResource res;
         CountThread(CommonResource com) { res = com; }
-
         // Синхронизация двух потоков
         @Override
         public void run()
         {
             synchronized (res)
             {
-                File file = new File(path1);
+                File file = new File(file_with_numbers_path);
                 // Количество чётных чисел
                 res.x1 = 0;
-                try (Scanner sc = new Scanner(new File(path1)))
+                try (Scanner sc = new Scanner(new File(file_with_numbers_path)))
                 {
                     while (sc.hasNextInt()) { int i1 = sc.nextInt(); if (i1 % 2 == 0 && i1 != 0) { res.x1++; } }
                 }
@@ -89,9 +94,14 @@ public class Main
                 try { Thread.sleep(100); }
                 catch (InterruptedException e) { e.printStackTrace(); }
 
+                // Записать количество чётных чисел в txt-файл
+                String fileData1 = "\nКоличество чётных чисел:\t" + res.x1;
+                try { Files.write(Paths.get(String.valueOf(file_with_results)), fileData1.getBytes(), StandardOpenOption.APPEND); }
+                catch (IOException e) { System.out.println(e); }
+
                 // Количество нечётных чисел
                 res.x2 = 0;
-                try (Scanner sc = new Scanner(new File(path1)))
+                try (Scanner sc = new Scanner(new File(file_with_numbers_path)))
                 {
                     while (sc.hasNextInt()) { int i1 = sc.nextInt(); if (i1 % 2 != 0 && i1 != 0) { res.x2++; } }
                 }
@@ -101,6 +111,11 @@ public class Main
                 catch (FileNotFoundException e) { e.printStackTrace(); }
                 try { Thread.sleep(100); }
                 catch (InterruptedException e) { e.printStackTrace(); }
+
+                // Записать количество нечётных чисел в txt-файл
+                String fileData2 = "\nКоличество нечётных чисел:\t" + res.x2;
+                try { Files.write(Paths.get(String.valueOf(file_with_results)), fileData2.getBytes(), StandardOpenOption.APPEND); }
+                catch (IOException e) { System.out.println(e); }
             }
         }
     }
@@ -134,7 +149,7 @@ public class Main
             // Перезаписать данные файла и записать в файл массив рандомных чисел
             int new_data[] = My_Array;
             BufferedWriter outputWriter = null;
-            try { outputWriter = new BufferedWriter(new FileWriter(file_name1)); }
+            try { outputWriter = new BufferedWriter(new FileWriter(file_with_numbers_name)); }
             catch (IOException e) { e.printStackTrace(); }
             for (int i = 0; i < new_data.length; i++)
             {
@@ -149,21 +164,29 @@ public class Main
         }
     }
 
-    public static void main(String[] args) throws InterruptedException
+    public static void main(String[] args) throws InterruptedException, IOException
     {
+        // Создать txt-файл для записи результатов
+        String file_with_results_name = "res.txt";
+        String file_with_results_path = "C:/Users/User_PavelIks/IdeaProjects/console1";
+        file_with_results = new File(file_with_results_path, file_with_results_name);
+        if (file_with_results.createNewFile())
+        { System.out.println("Создан файл " + file_with_results_name); }
+        else { System.out.println("Обнаружен файл " + file_with_results_name); }
+
         // Указать путь+файл(-.txt) и проверить на предмет наличия файла
         Scanner scanner1 = new Scanner(System.in);
         System.out.print("Введи путь: "); // C:/Users/User_PavelIks/IdeaProjects/console1/text.txt
-        path1 = scanner1.nextLine();
-        file_name1 = path1;
-        File file1 = new File(file_name1); if (file1.exists()) { System.out.println("Файл есть!"); } else { System.out.println("Файла нет!"); }
+        file_with_numbers_path = scanner1.nextLine();
+        file_with_numbers_name = file_with_numbers_path;
+        File file_with_numbers = new File(file_with_numbers_name); if (file_with_numbers.exists()) { System.out.println("Файл есть!"); } else { System.out.println("Файла нет, но будет создан!"); }
 
         // Thread: Сгенерировать рандомные числа
         new My_random_numbers_Thread().start();
         Thread.sleep(500);
 
         // Прочитать и показать данные из файла в консоле
-        try(FileInputStream fis1 = new FileInputStream(file_name1))
+        try(FileInputStream fis1 = new FileInputStream(file_with_numbers_name))
         {
             byte[] buffer = new byte[fis1.available()];
             fis1.read(buffer);
@@ -180,7 +203,7 @@ public class Main
         Thread t1 = new Thread(new CountThread(resource1));
         t1.start();
     }
-}*/
+}
 
 // Задание 3: Пользователь с клавиатуры вводит путь к существующей директории и к новой директории. После чего запускается поток, который должен скопировать содержимое директории в новое место. Необходимо сохранить структуру директории. В методе main необходимо отобразить статистику выполненных операций.
 /*package com.company;
