@@ -1,6 +1,5 @@
 // Задание: При старте приложения запускаются три потока. Первый поток заполняет массив случайными числами. Два других потока ожидают заполнения. Когда массив заполнен оба потока запускаются. Первый поток находит сумму элементов массива, второй поток среднеарифметическое значение в массиве. Полученный массив, сумма и среднеарифметическое возвращаются в метод main, где должны быть отображены.
 /*package com.company;
-
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
@@ -56,9 +55,7 @@ public class Main
 }*/
 
 // Задание 2: ...
-
 /*package com.company;
-
 import java.io.*;
 import java.util.Scanner;
 
@@ -184,3 +181,47 @@ public class Main
         t1.start();
     }
 }*/
+
+// Задание 3: ...
+package com.company;
+import java.io.*;
+import java.nio.file.*;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(String[] args) throws IOException
+    {
+        String sourceDirName = "C:/Users/User_PavelIks/IdeaProjects/sync_threads/Sas1";
+        String targetSourceDir = "C:/Users/User_PavelIks/IdeaProjects/sync_threads/Sas2";
+
+        // Перечень файлов
+        String dir = sourceDirName;
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Path.of(dir)))
+        {
+            System.out.print("Перечень файлов:\n");
+            int a1 = 0;
+            for (Path files: stream)
+            {
+                a1++;
+                System.out.println(a1+". " +files.getFileName());
+            }
+        }
+        catch (IOException | DirectoryIteratorException x) { System.err.println(x); }
+
+        // Копировать файлы из папки-1 и вставить в папку-2
+        File folder = new File(sourceDirName);
+        File[] listOfFiles = folder.listFiles();
+        Path destDir = Paths.get(targetSourceDir);
+        if (listOfFiles != null)
+        {
+            for (File file : listOfFiles)
+            {
+                Files.copy(file.toPath(), destDir.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
+            };
+            System.out.print("Успешно скопировано.\n" );
+        }
+
+        System.out.print("Успешно вставлено.\n");
+    }
+}
