@@ -148,17 +148,17 @@ public class Main
 
             // Перезаписать данные файла и записать в файл массив рандомных чисел
             int new_data[] = My_Array;
-            BufferedWriter outputWriter = null;
-            try { outputWriter = new BufferedWriter(new FileWriter(file_with_numbers_name)); }
+            BufferedWriter bufferedwriter = null;
+            try { bufferedwriter = new BufferedWriter(new FileWriter(file_with_numbers_name)); }
             catch (IOException e) { e.printStackTrace(); }
             for (int i = 0; i < new_data.length; i++)
             {
-                try { outputWriter.write(new_data[i] + " "); }
+                try { bufferedwriter.write(new_data[i] + " "); }
                 catch (IOException e) { e.printStackTrace(); }
             }
-            try { outputWriter.flush(); }
+            try { bufferedwriter.flush(); }
             catch (IOException e) { e.printStackTrace(); }
-            try { outputWriter.close(); }
+            try { bufferedwriter.close(); }
             catch (IOException e) { e.printStackTrace(); }
             System.out.println("Файл перезаписан и прочитан!");
         }
@@ -175,9 +175,9 @@ public class Main
         else { System.out.println("Обнаружен файл " + file_with_results_name); }
 
         // Указать путь+файл(-.txt) и проверить на предмет наличия файла
-        Scanner scanner1 = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         System.out.print("Введи путь: "); // C:/Users/User_PavelIks/IdeaProjects/console1/text.txt
-        file_with_numbers_path = scanner1.nextLine();
+        file_with_numbers_path = scanner.nextLine();
         file_with_numbers_name = file_with_numbers_path;
         File file_with_numbers = new File(file_with_numbers_name); if (file_with_numbers.exists()) { System.out.println("Файл есть!"); } else { System.out.println("Файла нет, но будет создан!"); }
 
@@ -186,14 +186,14 @@ public class Main
         Thread.sleep(500);
 
         // Прочитать и показать данные из файла в консоле
-        try(FileInputStream fis1 = new FileInputStream(file_with_numbers_name))
+        try(FileInputStream fis = new FileInputStream(file_with_numbers_name))
         {
-            byte[] buffer = new byte[fis1.available()];
-            fis1.read(buffer);
-            String file_data1 = new String(buffer);
-            System.out.println("\nСодержимое файла:\t\t\t" + file_data1);
+            byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+            String file_data = new String(buffer);
+            System.out.println("\nСодержимое файла:\t\t\t" + file_data);
             int i = -1;
-            while ((i=fis1.read()) != -1) { System.out.print((char)i); }
+            while ((i=fis.read()) != -1) { System.out.print((char)i); }
         }
         catch (IOException ex) { System.out.println(ex.getMessage()); }
         Thread.sleep(150);
