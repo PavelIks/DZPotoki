@@ -7,74 +7,57 @@ import java.util.stream.IntStream;
 public class Main
 {
     static int My_Array[];
+    static class CommonResource { double average_of_numbers = 0; int sum_of_numbers = 0; }
+    // Синхронизация двух потоков: AVG и сумма массива чисел
+    static class CountThread implements Runnable
+    {
+        CommonResource res;
+        CountThread(CommonResource com) { res = com; }
 
+        @Override
+        public void run()
+        {
+            synchronized (res)
+            {
+                // Найти и показать на консоле среднее арифметическое число массива
+                res.average_of_numbers = Arrays.stream(My_Array).average().orElse(Double.NaN);
+                System.out.println(res.average_of_numbers + " — среднее арифметическое массива");
+                // Найти и показать на консоле сумму массива
+                res.sum_of_numbers = IntStream.of(My_Array).sum();
+                System.out.println(res.sum_of_numbers + " — сумма массива");
+            }
+        }
+    }
+    // Поток, генерирующий массив чисел
     static class My_Array_Thread extends Thread
     {
         public void run()
         {
-            try
-            {
-                My_Array = new int[20];
-                for (int i = 0; i < My_Array.length; i++) { My_Array[i] = (int)(Math.random()*11); }
-                for (int i = 0; i < My_Array.length; i++) { System.out.print(My_Array[i] + " "); } System.out.print("— массив (диапазон — 0-10)" + "\n");
-
-                Thread.sleep(500);
-            }
-            catch(InterruptedException e)
-            {
-                System.out.println(e);
-            }
-        }
-    }
-
-    static class My_Average_Thread extends Thread
-    {
-        public void run()
-        {
-            try
-            {
-                double avg = Arrays.stream(My_Array).average().orElse(Double.NaN);
-                System.out.println(avg + " — среднее арифметическое массива");
-
-                Thread.sleep(500);
-            }
-            catch(InterruptedException e)
-            {
-                System.out.println(e);
-            }
-        }
-    }
-
-    static class My_Sum_Thread extends Thread
-    {
-        public void run()
-        {
-            try
-            {
-                int count = IntStream.of(My_Array).sum();
-                System.out.println(count + " — сумма массива");
-
-                Thread.sleep(500);
-            }
-            catch(InterruptedException e)
-            {
-                System.out.println(e);
-            }
+            // Массив из 20 чисел
+            My_Array = new int[20];
+            // Сгенерировать массив из 20 чисел диапазоном 0-10
+            for (int i = 0; i < My_Array.length; i++) { My_Array[i] = (int)(Math.random()*11); }
+            // Показать на консоле массив из 20 чисел диапазоном 0-10
+            for (int i = 0; i < My_Array.length; i++) { System.out.print(My_Array[i] + " "); }
+            System.out.print("— массив (диапазон — 0-10)" + "\n");
         }
     }
 
     public static void main(String[] args) throws InterruptedException
     {
+        // Thread: Генерация массива чисел
         new My_Array_Thread().start();
-        Thread.sleep(1000);
-        new My_Average_Thread().start();
-        new My_Sum_Thread().start();
+        Thread.sleep(500);
+        // Thread: AVG и сумма массива чисел
+        CommonResource resource1 = new CommonResource();
+        Thread t1 = new Thread(new CountThread(resource1));
+        t1.start();
     }
 }*/
 
-// Задание 2:
+// Задание 2: ...
 
-package com.company;
+/*package com.company;
 
 import java.io.*;
 import java.util.Scanner;
@@ -82,31 +65,28 @@ import java.util.Scanner;
 public class Main
 {
     static int My_Array[]; static String path1; static String file_name1;
-    static class CommonResource { int x1 = 0; int x2 = 0;}
+    static class CommonResource { int x1 = 0; int x2 = 0; }
 
     static class CountThread implements Runnable
     {
         CommonResource res;
         CountThread(CommonResource com) { res = com; }
 
-        // Синхронизация потоков
+        // Синхронизация двух потоков
         @Override
         public void run()
         {
             synchronized (res)
             {
+                File file = new File(path1);
                 // Количество чётных чисел
                 res.x1 = 0;
                 try (Scanner sc = new Scanner(new File(path1)))
                 {
-                    while (sc.hasNextInt())
-                    {
-                        int i1 = sc.nextInt(); if (i1 % 2 == 0 && i1 != 0) { res.x1++; }
-                    }
+                    while (sc.hasNextInt()) { int i1 = sc.nextInt(); if (i1 % 2 == 0 && i1 != 0) { res.x1++; } }
                 }
                 catch (IOException ex) { ex.printStackTrace(); }
                 System.out.println("Количество чётных чисел:\t" + res.x1);
-                File file = new File(path1);
                 try { printResult1(file); System.out.println(); }
                 catch (FileNotFoundException e) { e.printStackTrace(); }
                 try { Thread.sleep(100); }
@@ -118,8 +98,7 @@ public class Main
                 {
                     while (sc.hasNextInt()) { int i1 = sc.nextInt(); if (i1 % 2 != 0 && i1 != 0) { res.x2++; } }
                 }
-                catch (IOException ex)
-                { ex.printStackTrace(); }
+                catch (IOException ex) { ex.printStackTrace(); }
                 System.out.println("Количество нечётных чисел:\t" + res.x2);
                 try { printResult2(file); System.out.println(); }
                 catch (FileNotFoundException e) { e.printStackTrace(); }
@@ -177,7 +156,7 @@ public class Main
     {
         // Указать путь+файл(-.txt) и проверить на предмет наличия файла
         Scanner scanner1 = new Scanner(System.in);
-        System.out.print("Введи путь: "); /*C:/Users/User_PavelIks/IdeaProjects/console1/text.txt*/
+        System.out.print("Введи путь: "); // C:/Users/User_PavelIks/IdeaProjects/console1/text.txt
         path1 = scanner1.nextLine();
         file_name1 = path1;
         File file1 = new File(file_name1); if (file1.exists()) { System.out.println("Файл есть!"); } else { System.out.println("Файла нет!"); }
@@ -204,4 +183,4 @@ public class Main
         Thread t1 = new Thread(new CountThread(resource1));
         t1.start();
     }
-}
+}*/
