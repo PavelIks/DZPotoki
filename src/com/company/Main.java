@@ -190,9 +190,9 @@ import java.util.Scanner;
 
 public class Main
 {
-    static String first_path;
-    static String second_path;
+    static String first_path; static String second_path;
 
+    // Поток
     static class My_Thread extends Thread
     {
         public void run()
@@ -207,10 +207,7 @@ public class Main
                 {
                     for (File files : array_of_files)
                     {
-                        try
-                        {
-                            Files.copy(files.toPath(), path.resolve(files.getName()), StandardCopyOption.REPLACE_EXISTING);
-                        }
+                        try { Files.copy(files.toPath(), path.resolve(files.getName()), StandardCopyOption.REPLACE_EXISTING); }
                         catch (IOException e) { e.printStackTrace(); }
                     };
                     System.out.print("Успешно скопировано и вставлено.\n" );
@@ -220,44 +217,12 @@ public class Main
         }
     }
 
-    /*static class CommonResource { File file; Path path; }
-    static class CountThread implements Runnable
-    {
-        CommonResource res;
-        CountThread(CommonResource com) { res = com; }
-
-        // Синхронизация двух потоков
-        @Override
-        public void run()
-        {
-            synchronized (res)
-            {
-                // Копировать содержимое из папки-A и вставить в папку-B
-                res.file = new File(first_path);
-                File[] array_of_files = res.file.listFiles();
-                res.path = Paths.get(second_path);
-                if (array_of_files != null)
-                {
-                    for (File files : array_of_files)
-                    {
-                        try
-                        {
-                            Files.copy(files.toPath(), res.path.resolve(files.getName()), StandardCopyOption.REPLACE_EXISTING);
-                        }
-                        catch (IOException e) { e.printStackTrace(); }
-                    };
-                    System.out.print("Успешно скопировано.\n" );
-                }
-            }
-        }
-    }*/
-
     public static void main(String[] args)
     {
+        // Ввод путей
         Scanner scanner1 = new Scanner(System.in);
         System.out.print("Введи 1 путь: "); // C:/Users/User_PavelIks/IdeaProjects/console1/Folder_1
         first_path = scanner1.nextLine();
-
         Scanner scanner2 = new Scanner(System.in);
         System.out.print("Введи 2 путь: "); // C:/Users/User_PavelIks/IdeaProjects/console1/Folder_2
         second_path = scanner2.nextLine();
@@ -272,10 +237,7 @@ public class Main
         }
         catch (IOException | DirectoryIteratorException x) { System.err.println(x); }
 
-        /*CommonResource resource1 = new CommonResource();
-        Thread t1 = new Thread(new CountThread(resource1));
-        t1.start();*/
-
+        // Thread: Начать копирование и вставку
         new My_Thread().start();
     }
 }
