@@ -190,38 +190,92 @@ import java.util.Scanner;
 
 public class Main
 {
-    public static void main(String[] args) throws IOException
+    static String first_path;
+    static String second_path;
+
+    static class My_Thread extends Thread
     {
-        String sourceDirName = "C:/Users/User_PavelIks/IdeaProjects/sync_threads/Sas1";
-        String targetSourceDir = "C:/Users/User_PavelIks/IdeaProjects/sync_threads/Sas2";
+        public void run()
+        {
+            try
+            {
+                // Копировать содержимое из папки-A и вставить в папку-B
+                File file = new File(first_path);
+                File[] array_of_files = file.listFiles();
+                Path path = Paths.get(second_path);
+                if (array_of_files != null)
+                {
+                    for (File files : array_of_files)
+                    {
+                        try
+                        {
+                            Files.copy(files.toPath(), path.resolve(files.getName()), StandardCopyOption.REPLACE_EXISTING);
+                        }
+                        catch (IOException e) { e.printStackTrace(); }
+                    };
+                    System.out.print("Успешно скопировано и вставлено.\n" );
+                }
+            }
+            catch (Exception exception) { exception.printStackTrace(); }
+        }
+    }
+
+    /*static class CommonResource { File file; Path path; }
+    static class CountThread implements Runnable
+    {
+        CommonResource res;
+        CountThread(CommonResource com) { res = com; }
+
+        // Синхронизация двух потоков
+        @Override
+        public void run()
+        {
+            synchronized (res)
+            {
+                // Копировать содержимое из папки-A и вставить в папку-B
+                res.file = new File(first_path);
+                File[] array_of_files = res.file.listFiles();
+                res.path = Paths.get(second_path);
+                if (array_of_files != null)
+                {
+                    for (File files : array_of_files)
+                    {
+                        try
+                        {
+                            Files.copy(files.toPath(), res.path.resolve(files.getName()), StandardCopyOption.REPLACE_EXISTING);
+                        }
+                        catch (IOException e) { e.printStackTrace(); }
+                    };
+                    System.out.print("Успешно скопировано.\n" );
+                }
+            }
+        }
+    }*/
+
+    public static void main(String[] args)
+    {
+        Scanner scanner1 = new Scanner(System.in);
+        System.out.print("Введи 1 путь: "); // C:/Users/User_PavelIks/IdeaProjects/console1/Folder_1
+        first_path = scanner1.nextLine();
+
+        Scanner scanner2 = new Scanner(System.in);
+        System.out.print("Введи 2 путь: "); // C:/Users/User_PavelIks/IdeaProjects/console1/Folder_2
+        second_path = scanner2.nextLine();
 
         // Перечень файлов
-        String dir = sourceDirName;
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Path.of(dir)))
+        String list = first_path;
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Path.of(list)))
         {
             System.out.print("Перечень файлов:\n");
             int a1 = 0;
-            for (Path files: stream)
-            {
-                a1++;
-                System.out.println(a1+". " +files.getFileName());
-            }
+            for (Path files: stream) { a1++; System.out.println(a1 + ". " + files.getFileName()); }
         }
         catch (IOException | DirectoryIteratorException x) { System.err.println(x); }
 
-        // Копировать файлы из папки-1 и вставить в папку-2
-        File folder = new File(sourceDirName);
-        File[] listOfFiles = folder.listFiles();
-        Path destDir = Paths.get(targetSourceDir);
-        if (listOfFiles != null)
-        {
-            for (File file : listOfFiles)
-            {
-                Files.copy(file.toPath(), destDir.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
-            };
-            System.out.print("Успешно скопировано.\n" );
-        }
+        /*CommonResource resource1 = new CommonResource();
+        Thread t1 = new Thread(new CountThread(resource1));
+        t1.start();*/
 
-        System.out.print("Успешно вставлено.\n");
+        new My_Thread().start();
     }
 }
