@@ -68,7 +68,7 @@ public class Main
     static String file_with_numbers_path;
     static String file_with_numbers_name;
     static File file_with_results;
-    static class CommonResource { int x1 = 0; int x2 = 0; }
+    static class CommonResource { int even_numbers = 0; int odd_numbers = 0; }
 
     static class CountThread implements Runnable
     {
@@ -82,38 +82,38 @@ public class Main
             {
                 File file = new File(file_with_numbers_path);
                 // Количество чётных чисел
-                res.x1 = 0;
+                res.even_numbers = 0;
                 try (Scanner sc = new Scanner(new File(file_with_numbers_path)))
                 {
-                    while (sc.hasNextInt()) { int i1 = sc.nextInt(); if (i1 % 2 == 0 && i1 != 0) { res.x1++; } }
+                    while (sc.hasNextInt()) { int en = sc.nextInt(); if (en % 2 == 0 && en != 0) { res.even_numbers++; } }
                 }
                 catch (IOException ex) { ex.printStackTrace(); }
-                System.out.println("Количество чётных чисел:\t" + res.x1);
+                System.out.println("Количество чётных чисел:\t" + res.even_numbers);
                 try { printResult1(file); System.out.println(); }
                 catch (FileNotFoundException e) { e.printStackTrace(); }
                 try { Thread.sleep(100); }
                 catch (InterruptedException e) { e.printStackTrace(); }
 
                 // Записать количество чётных чисел в txt-файл
-                String fileData1 = "\nКоличество чётных чисел:\t" + res.x1;
+                String fileData1 = "\nКоличество чётных чисел:\t" + res.even_numbers;
                 try { Files.write(Paths.get(String.valueOf(file_with_results)), fileData1.getBytes(), StandardOpenOption.APPEND); }
                 catch (IOException e) { System.out.println(e); }
 
                 // Количество нечётных чисел
-                res.x2 = 0;
+                res.odd_numbers = 0;
                 try (Scanner sc = new Scanner(new File(file_with_numbers_path)))
                 {
-                    while (sc.hasNextInt()) { int i1 = sc.nextInt(); if (i1 % 2 != 0 && i1 != 0) { res.x2++; } }
+                    while (sc.hasNextInt()) { int i1 = sc.nextInt(); if (i1 % 2 != 0 && i1 != 0) { res.odd_numbers++; } }
                 }
                 catch (IOException ex) { ex.printStackTrace(); }
-                System.out.println("Количество нечётных чисел:\t" + res.x2);
+                System.out.println("Количество нечётных чисел:\t" + res.odd_numbers);
                 try { printResult2(file); System.out.println(); }
                 catch (FileNotFoundException e) { e.printStackTrace(); }
                 try { Thread.sleep(100); }
                 catch (InterruptedException e) { e.printStackTrace(); }
 
                 // Записать количество нечётных чисел в txt-файл
-                String fileData2 = "\nКоличество нечётных чисел:\t" + res.x2;
+                String fileData2 = "\nКоличество нечётных чисел:\t" + res.odd_numbers;
                 try { Files.write(Paths.get(String.valueOf(file_with_results)), fileData2.getBytes(), StandardOpenOption.APPEND); }
                 catch (IOException e) { System.out.println(e); }
             }
